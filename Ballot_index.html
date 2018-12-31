@@ -1,0 +1,169 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ballot</title>
+    <link rel="stylesheet" type="text/css" href="main.css">
+    <script src="./node_modules/web3/dist/web3.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script>
+        isStarted = false;
+        if (typeof web3 !== 'undefined') {
+            web3 = new Web3(web3.currentProvider);
+        } else {
+            web3 = new Web3(new Web3.providers.HttpProvider("http://192.168.142.129:8545"));
+        }
+
+    web3.eth.defaultAccount = web3.eth.accounts[0];
+
+        var ballotContract = web3.eth.contract([
+        {
+          "constant":true,
+          "inputs":[{
+            "name":"candidateID",
+            "type":"uint256"
+          }],
+          "name":"totalVotes",
+          "outputs":[{
+            "name":"",
+            "type":"uint256"
+          }],
+          "payable":false,
+          "stateMutability":"view",
+          "type":"function"
+        },
+        {
+          "constant":true,
+          "inputs":[{
+            "name":"candidateID",
+            "type":"uint256"
+          }],
+          "name":"getCandidate",
+          "outputs":[{
+            "name":"",
+            "type":"uint256"
+          },
+          {
+            "name":"",
+            "type":"bytes32"
+          },
+          {
+            "name":"",
+            "type":"bytes32"
+          }],
+          "payable":false,
+          "stateMutability":"view",
+          "type":"function"
+        },
+        {
+          "constant":true,
+          "inputs":[],
+          "name":"getNumOfVoters",
+          "outputs":[{
+            "name":"",
+            "type":"uint256"
+          }],
+          "payable":false,
+          "stateMutability":"view",
+          "type":"function"
+        },
+        {
+          "constant":false,
+          "inputs":[{
+            "name":"uid",
+            "type":"bytes32"
+          },
+          {
+            "name":"candidateID",
+            "type":"uint256"
+          }],
+          "name":"vote",
+          "outputs":[],
+          "payable":false,
+          "stateMutability":"nonpayable",
+          "type":"function"
+        },
+        {
+          "constant":false,
+          "inputs":[{
+            "name":"name",
+            "type":"bytes32"
+          },
+          {
+            "name":"party",
+            "type":"bytes32"
+          }],
+          "name":"addCandidate",
+          "outputs":[],
+          "payable":false,
+          "stateMutability":"nonpayable",
+          "type":"function"
+        },
+        {
+          "constant":true,
+          "inputs":[],
+          "name":"getNumOfCandidates",
+          "outputs":[{
+            "name":"",
+            "type":"uint256"
+          }],
+          "payable":false,
+          "stateMutability":"view",
+          "type":"function"
+        },
+        {
+          "anonymous":false,
+          "inputs":[{
+            "indexed":false,
+            "name":"candidateID",
+            "type":"uint256"
+          }],
+          "name":"AddedCandidate",
+          "type":"event"
+        }]);
+
+
+    var Ballot = ballotContract.at('0x6056e766b9bb0d0e887d8b4f6bc9ee123b71d626');
+
+        var allEvent = Ballot.allEvents({ fromBlock: 0, toBlock: 'latest' });
+
+        var Candidate0 = {
+            id: "0x3c38d1bc90848cd7a2acb4e0fb566281a72559d4a42b11f7ef3d8257601e5e1d",
+            name: "Trump",
+            party: "GOP",
+            doesExist: true,
+        }
+
+        $("#Add").click(function() {
+            var tempName = document.getElementById("cName").value;
+            var tempParty = document.getElementById("cParty").value;
+            function addCandidate(tempName, tempParty){};
+        });
+        $("#Vote").click(function(){
+            var uId = document.getElementById("vId").value;
+            var candidateID = document.getElementById("vcId").value;
+            function vote(uId, vcID) {};
+        });
+    </script>
+</head>
+<body>
+  		<h1>基于区块链的投票器</h1>
+      <div class="box2">
+  			<h2 class="addCandidate">addNewCandidate</h2>
+        <div class="candidate">
+          <div class="box1" id="cName">Name: <input id="name-new" type="text"><br></div>
+          <div class="box1" id="cParty">Party:<input id="party-new" type="text"><br></div>
+          <button class="btn">Add</button>
+        </div>
+      </div>
+      <div class="box2">
+        <h2 class="vote">voteToCandidate</h2>
+        <div class="candidate">
+          <div class="box1" id="vId">YourId: <input id="name-new" type="text"><br></div>
+          <div class="box1" id="vcId">CandidatesId:<input id="party-new" type="text"><br></div>
+          <button class="btn">Vote</button>
+        </div>
+      </div>
+</body>
+</html>
